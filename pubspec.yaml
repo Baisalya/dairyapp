@@ -44,6 +44,8 @@ dependencies:
   intl:
     # External Integrations
   url_launcher: ^6.2.1
+  #firebase
+  firebase_core:
 dev_dependencies:
   flutter_test:
     sdk: flutter
