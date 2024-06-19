@@ -2,6 +2,10 @@
 import 'package:dairyapp/Intro/Splashscreen.dart';
 import 'package:get/get.dart';
 
+import '../Pages/Home/HomeScreen.dart';
+import '../Pages/Home/Tabs/SettingTab.dart';
+import '../Pages/Home/Tabs/SettingTab/ChangePasswordScreen.dart';
+import '../Pages/Home/Tabs/SettingTab/EditProfileScreen.dart';
 import '../Pages/User/LoginScreen.dart';
 import '../Pages/User/SignupScreen.dart';
 
@@ -35,19 +39,19 @@ class AppRoutes {
         transition: Transition.upToDown
     ),
     //Tabs
-    /*GetPage(name: '/home',
-        page: ()=>HomeScreen()),*/
+    GetPage(name: '/home',
+        page: ()=>HomeScreen()),
    /* GetPage(name: '/chat',
         page: ()=>ChatScreen()),*/
 
-    /* GetPage(name: '/setting',
+     GetPage(name: '/setting',
         page:()=> SettingsTab()),
 
     //setting contents
     GetPage(name: '/editProfile',
         page: ()=>EditProfileScreen()),
     GetPage(name:'/changePassword' ,
-        page: ()=>ChangePasswordScreen())*/
+        page: ()=>ChangePasswordScreen())
   ];
 }
 
