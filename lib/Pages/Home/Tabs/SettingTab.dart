@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
+import '../../../Controller/AuthController.dart';
+
 class SettingsTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -125,8 +127,11 @@ class SettingsTab extends StatelessWidget {
 
   Widget _buildLogoutButton() {
     return ElevatedButton.icon(
-      onPressed: () {
-        // Implement logout functionality here
+      onPressed: () async {
+        // Call signOut method from AuthController
+        await AuthController().signOut();
+
+        // Navigate to the login screen
         Get.offNamed('/login');
       },
       icon: Icon(Icons.logout, color: Colors.red),
@@ -140,6 +145,7 @@ class SettingsTab extends StatelessWidget {
       ),
     );
   }
+
 
   Widget _buildListTile(String title, IconData icon, VoidCallback onTap) {
     return ListTile(
