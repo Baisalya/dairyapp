@@ -6,6 +6,9 @@ import '../Pages/Home/HomeScreen.dart';
 import '../Pages/Home/Tabs/SettingTab.dart';
 import '../Pages/Home/Tabs/SettingTab/ChangePasswordScreen.dart';
 import '../Pages/Home/Tabs/SettingTab/EditProfileScreen.dart';
+import '../Pages/Home/Tabs/SettingTab/Privacypolicy.dart';
+import '../Pages/Home/Tabs/SettingTab/help center/view/index.dart';
+import '../Pages/Home/Tabs/SettingTab/terms&condition.dart';
 import '../Pages/User/LoginScreen.dart';
 import '../Pages/User/SignupScreen.dart';
 
@@ -51,7 +54,16 @@ class AppRoutes {
     GetPage(name: '/editProfile',
         page: ()=>EditProfileScreen()),
     GetPage(name:'/changePassword' ,
-        page: ()=>ChangePasswordScreen())
+        page: ()=>ChangePasswordScreen()),
+    GetPage(name: '/termscnd',
+        page:()=> TermsAndConditionsScreen()),
+    GetPage(name:'/changePassword' ,
+        page: ()=>ChangePasswordScreen()),
+    GetPage(name:'/help&support' ,
+        page: ()=>SupportView()),
+    GetPage(
+        name:'/pp' ,
+        page: ()=> PrivacyPolicyScreen()),
   ];
 }
 

@@ -41,5 +41,42 @@ class AuthController {
   Future<User?> getCurrentUser() async {
     return _auth.currentUser;
   }
+
+  // Method to verify phone number
+  Future<void> verifyPhoneNumber(
+      String phoneNumber,
+      Function(String) codeSent,
+      Function(PhoneAuthCredential) verificationCompleted,
+      Function(FirebaseAuthException) verificationFailed,
+      Function(String) codeAutoRetrievalTimeout,
+      ) async {
+    await _auth.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+      verificationCompleted: verificationCompleted,
+      verificationFailed: verificationFailed,
+      codeSent: (String verificationId, int? resendToken) {
+        codeSent(verificationId);
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {
+        codeAutoRetrievalTimeout(verificationId);
+      },
+    );
+  }
+
+  // Method to sign in with phone number
+  Future<User?> signInWithPhoneNumber(String verificationId, String smsCode) async {
+    try {
+      final AuthCredential credential = PhoneAuthProvider.credential(
+        verificationId: verificationId,
+        smsCode: smsCode,
+      );
+
+      final UserCredential userCredential = await _auth.signInWithCredential(credential);
+      return userCredential.user;
+    } catch (e) {
+      print('Error signing in with phone number: $e');
+      return null;
+    }
+  }
 }
 

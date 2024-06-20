@@ -6,6 +6,8 @@ import '../../Utility/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'OtpScreen.dart';
+
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -14,19 +16,56 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final AuthController _authController = AuthController();
+  final TextEditingController _phoneNumberController = TextEditingController();
 
   void _handleGoogleSignIn() async {
     User? user = await _authController.signInWithGoogle();
     if (user != null) {
-      // User signed in successfully, navigate to the home screen or another screen
       Get.offNamed('/home');
     } else {
-      // Sign-in failed, show a message to the user
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Google sign-in failed')),
       );
     }
   }
+
+  void _verifyPhoneNumber() async {
+    String phoneNumber = _phoneNumberController.text.trim();
+    if (phoneNumber.isNotEmpty) {
+      await _authController.verifyPhoneNumber(
+        phoneNumber,
+            (verificationId) {
+          Get.to(() => OtpScreen(phoneNumber: phoneNumber, verificationId: verificationId));
+        },
+            (credential) async {
+          User? user = await _authController.signInWithPhoneNumber(
+            credential.verificationId!,
+            credential.smsCode!,
+          );
+          if (user != null) {
+            Get.offNamed('/home');
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Phone sign-in failed')),
+            );
+          }
+        },
+            (error) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Phone verification failed: ${error.message}')),
+          );
+        },
+            (verificationId) {
+          Get.to(() => OtpScreen(phoneNumber: phoneNumber, verificationId: verificationId));
+        },
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please enter a valid phone number')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,15 +145,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        _buildTextField(context, 'Mobile no:'),
+                        _buildTextField(context, 'Mobile no:', controller: _phoneNumberController),
                         SizedBox(height: 20),
                         ElevatedButton(
-                          onPressed: () {
-                            // Handle log in
-                          },
+                          onPressed: _verifyPhoneNumber,
                           style: AppTheme.elevatedButtonStyle,
                           child: Text(
-                            'Log In',
+                            'Send Code',
                             style: TextStyle(
                               fontSize: 18.0,
                               color: Colors.white,
@@ -134,7 +171,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                // Handle sign up navigation
                                 Navigator.of(context).pushNamed('/signup');
                               },
                               child: Text(
@@ -151,10 +187,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         SizedBox(height: 20),
                         OutlinedButton(
                           onPressed: _handleGoogleSignIn,
-                         /* onPressed: () {
-                            // Handle sign up with Google
-                            // Example: Implement Google sign-in functionality
-                          },*/
                           style: OutlinedButton.styleFrom(
                             side: BorderSide(color: Colors.red),
                             shape: RoundedRectangleBorder(
@@ -191,8 +223,9 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildTextField(BuildContext context, String labelText, {bool isPassword = false}) {
+  Widget _buildTextField(BuildContext context, String labelText, {bool isPassword = false, TextEditingController? controller}) {
     return TextField(
+      controller: controller,
       obscureText: isPassword,
       style: AppTheme.normalTextStyle.copyWith(color: Colors.black),
       decoration: InputDecoration(
@@ -217,3 +250,6 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
+
+
+
