@@ -1,32 +1,98 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../Controller/AuthController.dart';
 import '../../Utility/theme.dart';
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class LoginScreen extends StatelessWidget {
+
+class LoginScreen extends StatefulWidget {
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final AuthController _authController = AuthController();
+
+  void _handleGoogleSignIn() async {
+    User? user = await _authController.signInWithGoogle();
+    if (user != null) {
+      // User signed in successfully, navigate to the home screen or another screen
+      Get.offNamed('/home');
+    } else {
+      // Sign-in failed, show a message to the user
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Google sign-in failed')),
+      );
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Container(
-            decoration: BoxDecoration(
-              color: AppTheme.primaryColor,
-            ),
-            child: Column(
-              children: [
-                Container(
-                  height: 300,
-                  decoration: BoxDecoration(),
-                  child: Center(
-                    child: Image.asset(
-                      'assets/user/drinkmilk.png',
-                      height: 300,
-                      fit: BoxFit.cover,
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Color(0xFF73AEF5), Color(0xFF61A4F1), Color(0xFF478DE0), Color(0xFF398AE5)],
+            stops: [0.1, 0.4, 0.7, 0.9],
+          ),
+        ),
+        child: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                height: 250,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Positioned.fill(
+                      child: Image.asset(
+                        'assets/user/drinkmilk.png',
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                  ),
+                    Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [Colors.transparent, Colors.black.withOpacity(0.7)],
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Welcome Back!',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 24.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Text(
+                            'Log In to continue',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16.0,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                Card(
+              ),
+              Expanded(
+                child: Card(
+                  color: Colors.white,
                   margin: EdgeInsets.zero,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(
@@ -34,79 +100,91 @@ class LoginScreen extends StatelessWidget {
                       topRight: Radius.circular(40),
                     ),
                   ),
+                  elevation: 8,
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Text.rich(
-                          TextSpan(
-                            children: [
-                              TextSpan(
-                                text: 'Welcome Back, ',
-                                style: AppTheme.headingTextStyle.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: AppTheme.boldTextColor,
-                                ),
-                              ),
-                              TextSpan(
-                                text: 'Log In',
-                                style: AppTheme.headingTextStyle.copyWith(
-                                  fontWeight: FontWeight.normal,
-                                  color: AppTheme.subtitleColor,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 20),
-                        _buildTextField(context, 'Email'),
-                        SizedBox(height: 10),
-                        _buildTextField(context, 'Password', isPassword: true),
+                        _buildTextField(context, 'Mobile no:'),
                         SizedBox(height: 20),
                         ElevatedButton(
                           onPressed: () {
                             // Handle log in
                           },
                           style: AppTheme.elevatedButtonStyle,
-                          child: Icon(
-                            Icons.arrow_forward,
-                            color: AppTheme.buttonTextStyle.color,
-                            size: 32.0,
+                          child: Text(
+                            'Log In',
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                         SizedBox(height: 20),
-                        GestureDetector(
-                          onTap: () {
-                            // Handle sign up navigation
-                           Get.offNamed('/signup');
-                          },
-                          child: Text.rich(
-                            TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: "Don't Have An Account? ",
-                                  style: AppTheme.subtitleTextStyle.copyWith(
-                                    color: Colors.black,
-                                    decoration: TextDecoration.none,
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: 'Sign Up',
-                                  style: AppTheme.headingTextStyle.copyWith(
-                                    color: AppTheme.primaryColor,
-                                    decoration: TextDecoration.none,
-                                  ),
-                                ),
-                              ],
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Don't have an account? ",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16.0,
+                              ),
                             ),
+                            GestureDetector(
+                              onTap: () {
+                                // Handle sign up navigation
+                                Navigator.of(context).pushNamed('/signup');
+                              },
+                              child: Text(
+                                'Sign Up',
+                                style: TextStyle(
+                                  color: AppTheme.primaryColor,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 20),
+                        OutlinedButton(
+                          onPressed: _handleGoogleSignIn,
+                         /* onPressed: () {
+                            // Handle sign up with Google
+                            // Example: Implement Google sign-in functionality
+                          },*/
+                          style: OutlinedButton.styleFrom(
+                            side: BorderSide(color: Colors.red),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                'assets/google_logo.png', // Replace with your Google logo asset path
+                                height: 24.0,
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                'Sign up with Google',
+                                style: TextStyle(
+                                  fontSize: 16.0,
+                                  color: Colors.red,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -116,26 +194,26 @@ class LoginScreen extends StatelessWidget {
   Widget _buildTextField(BuildContext context, String labelText, {bool isPassword = false}) {
     return TextField(
       obscureText: isPassword,
-      style: AppTheme.normalTextStyle,
+      style: AppTheme.normalTextStyle.copyWith(color: Colors.black),
       decoration: InputDecoration(
         labelText: labelText,
         labelStyle: TextStyle(
-          color: AppTheme.secondaryColor,
+          color: Colors.black,
           fontSize: 16.0,
           fontWeight: FontWeight.w500,
         ),
         filled: true,
-        fillColor: AppTheme.backgroundColor,
-        contentPadding: EdgeInsets.symmetric(horizontal: 1, vertical: 15),
-        enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: AppTheme.secondaryColor),
+        fillColor: Colors.white,
+        contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 15.0),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.white),
+          borderRadius: BorderRadius.circular(10.0),
         ),
-        focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: AppTheme.secondaryColor, width: 2.0),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: AppTheme.primaryColor, width: 2.0),
+          borderRadius: BorderRadius.circular(10.0),
         ),
       ),
     );
   }
 }
-
-

@@ -19,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // Set a timer to navigate after 3 seconds
     Timer(Duration(seconds: 3), () {
       // Navigate to the new route
-      Get.offNamed('/home');
+      Get.offNamed('/login');
     });
   }
 
