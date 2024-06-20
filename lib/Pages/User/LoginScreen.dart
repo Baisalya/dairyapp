@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 
 import '../../Controller/AuthController.dart';
 import '../../Utility/theme.dart';
@@ -9,6 +10,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'OtpScreen.dart';
 
 
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
+import '../../Controller/AuthController.dart';
+import '../../Utility/theme.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'OtpScreen.dart';
+
 class LoginScreen extends StatefulWidget {
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -17,6 +26,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final AuthController _authController = AuthController();
   final TextEditingController _phoneNumberController = TextEditingController();
+  String _completePhoneNumber = '';
 
   void _handleGoogleSignIn() async {
     User? user = await _authController.signInWithGoogle();
@@ -30,12 +40,11 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _verifyPhoneNumber() async {
-    String phoneNumber = _phoneNumberController.text.trim();
-    if (phoneNumber.isNotEmpty) {
+    if (_completePhoneNumber.isNotEmpty) {
       await _authController.verifyPhoneNumber(
-        phoneNumber,
+        _completePhoneNumber,
             (verificationId) {
-          Get.to(() => OtpScreen(phoneNumber: phoneNumber, verificationId: verificationId));
+          Get.to(() => OtpScreen(phoneNumber: _completePhoneNumber, verificationId: verificationId));
         },
             (credential) async {
           User? user = await _authController.signInWithPhoneNumber(
@@ -56,7 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
           );
         },
             (verificationId) {
-          Get.to(() => OtpScreen(phoneNumber: phoneNumber, verificationId: verificationId));
+          Get.to(() => OtpScreen(phoneNumber: _completePhoneNumber, verificationId: verificationId));
         },
       );
     } else {
@@ -224,10 +233,10 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _buildTextField(BuildContext context, String labelText, {bool isPassword = false, TextEditingController? controller}) {
-    return TextField(
+    return IntlPhoneField(
       controller: controller,
       obscureText: isPassword,
-      style: AppTheme.normalTextStyle.copyWith(color: Colors.black),
+      initialCountryCode: 'IN',
       decoration: InputDecoration(
         labelText: labelText,
         labelStyle: TextStyle(
@@ -247,9 +256,17 @@ class _LoginScreenState extends State<LoginScreen> {
           borderRadius: BorderRadius.circular(10.0),
         ),
       ),
+      onChanged: (phone) {
+        _completePhoneNumber = phone.completeNumber;
+        print(_completePhoneNumber);
+      },
+      onCountryChanged: (phone) {
+        print('Country code changed to: ${phone.code}');
+      },
     );
   }
 }
+
 
 
 
