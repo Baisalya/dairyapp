@@ -42,6 +42,7 @@ dependencies:
   carousel_slider:
   convex_bottom_bar:
   intl_phone_field:
+  sms_autofill:
   intl:
     # External Integrations
   url_launcher: ^6.2.1

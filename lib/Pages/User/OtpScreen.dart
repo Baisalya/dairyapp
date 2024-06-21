@@ -10,6 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:async';
+import 'package:sms_autofill/sms_autofill.dart';
 
 import '../../Controller/AuthController.dart';
 import '../../Utility/theme.dart'; // Assuming you are using GetX for navigation
@@ -24,7 +25,7 @@ class OtpScreen extends StatefulWidget {
   State<OtpScreen> createState() => _OtpScreenState();
 }
 
-class _OtpScreenState extends State<OtpScreen> {
+class _OtpScreenState extends State<OtpScreen> with CodeAutoFill {
   final AuthController _authController = AuthController();
   final List<TextEditingController> _otpControllers = List.generate(6, (_) => TextEditingController());
   final List<FocusNode> _focusNodes = List.generate(6, (_) => FocusNode());
@@ -36,6 +37,23 @@ class _OtpScreenState extends State<OtpScreen> {
   void initState() {
     super.initState();
     _startTimer();
+    listenForCode();
+  }
+
+  @override
+  void codeUpdated() {
+    final code = this.code;
+    if (code != null) {
+      setState(() {
+        for (int i = 0; i < code.length; i++) {
+          _otpControllers[i].text = code[i];
+        }
+      });
+
+      if (code.length == 6) {
+        _signInWithSmsCode();
+      }
+    }
   }
 
   void _startTimer() {
@@ -117,6 +135,7 @@ class _OtpScreenState extends State<OtpScreen> {
     for (var focusNode in _focusNodes) {
       focusNode.dispose();
     }
+    cancel();
     super.dispose();
   }
 
@@ -140,7 +159,7 @@ class _OtpScreenState extends State<OtpScreen> {
             SizedBox(height: 20),
             Center(
               child: Image.asset(
-                'assets/images/otp_illustration.png', // Add your illustration asset here
+                'assets/images/otp_lock.jpeg', // Add your illustration asset here
                 height: 150,
               ),
             ),
@@ -152,7 +171,7 @@ class _OtpScreenState extends State<OtpScreen> {
             ),
             SizedBox(height: 10),
             Text(
-              'We will send you an One Time Passcode via this No ${widget.phoneNumber}',
+              'We will send you an One Time Passcode via this ${widget.phoneNumber} email address',
               style: TextStyle(fontSize: 16.0),
               textAlign: TextAlign.center,
             ),
@@ -202,6 +221,7 @@ class _OtpScreenState extends State<OtpScreen> {
             TextButton(
               onPressed: () {
                 // Add your change email address functionality here
+                Get.offNamed('/login');
               },
               child: Text(
                 'Change the Phone No:',
@@ -251,6 +271,7 @@ class _OtpScreenState extends State<OtpScreen> {
     );
   }
 }
+
 
 
 
