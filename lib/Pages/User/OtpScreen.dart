@@ -6,6 +6,13 @@ import '../../Controller/AuthController.dart';
 import '../../Utility/theme.dart'; // Assuming you are using GetX for navigation
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'dart:async';
+
+import '../../Controller/AuthController.dart';
+import '../../Utility/theme.dart'; // Assuming you are using GetX for navigation
 
 class OtpScreen extends StatefulWidget {
   final String phoneNumber;
@@ -19,9 +26,10 @@ class OtpScreen extends StatefulWidget {
 
 class _OtpScreenState extends State<OtpScreen> {
   final AuthController _authController = AuthController();
-  final TextEditingController _smsCodeController = TextEditingController();
+  final List<TextEditingController> _otpControllers = List.generate(6, (_) => TextEditingController());
+  final List<FocusNode> _focusNodes = List.generate(6, (_) => FocusNode());
   late Timer _timer;
-  int _start = 30; // Countdown start time in seconds
+  int _start = 120; // Countdown start time in seconds
   bool _isButtonDisabled = true; // Resend button state
 
   @override
@@ -31,7 +39,7 @@ class _OtpScreenState extends State<OtpScreen> {
   }
 
   void _startTimer() {
-    _start = 30; // Reset timer
+    _start = 120; // Reset timer
     _isButtonDisabled = true;
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (_start == 0) {
@@ -83,8 +91,8 @@ class _OtpScreenState extends State<OtpScreen> {
   }
 
   Future<void> _signInWithSmsCode() async {
-    String smsCode = _smsCodeController.text.trim();
-    if (smsCode.isNotEmpty) {
+    String smsCode = _otpControllers.map((controller) => controller.text).join();
+    if (smsCode.length == 6) {
       User? user = await _authController.signInWithPhoneNumber(widget.verificationId, smsCode);
       if (user != null) {
         Get.offNamed('/home');
@@ -103,41 +111,67 @@ class _OtpScreenState extends State<OtpScreen> {
   @override
   void dispose() {
     _timer.cancel();
-    _smsCodeController.dispose();
+    for (var controller in _otpControllers) {
+      controller.dispose();
+    }
+    for (var focusNode in _focusNodes) {
+      focusNode.dispose();
+    }
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFE6DFF1),
       appBar: AppBar(
-        title: Text('Enter OTP'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Get.back(),
+        ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(
-              'Enter the OTP sent to ${widget.phoneNumber}',
-              style: TextStyle(fontSize: 18.0),
+            SizedBox(height: 20),
+            Center(
+              child: Image.asset(
+                'assets/images/otp_illustration.png', // Add your illustration asset here
+                height: 150,
+              ),
             ),
             SizedBox(height: 20),
-            TextField(
-              controller: _smsCodeController,
-              decoration: InputDecoration(
-                labelText: 'Verification Code',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.lock_outline),
+            Text(
+              'Enter your Verification code',
+              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 10),
+            Text(
+              'We will send you an One Time Passcode via this No ${widget.phoneNumber}',
+              style: TextStyle(fontSize: 16.0),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 20),
+            Container(
+              height: 60,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: List.generate(6, (index) {
+                  return _buildOtpBox(index);
+                }),
               ),
-              keyboardType: TextInputType.number,
             ),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: _signInWithSmsCode,
               style: AppTheme.elevatedButtonStyle,
               child: Text(
-                'Verify Code',
+                'Verify OTP',
                 style: TextStyle(
                   fontSize: 18.0,
                   color: Colors.white,
@@ -145,23 +179,33 @@ class _OtpScreenState extends State<OtpScreen> {
               ),
             ),
             SizedBox(height: 20),
+            SizedBox(height: 10),
             Text(
               'Resend code in $_start seconds',
               style: TextStyle(fontSize: 16.0),
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 10),
-            ElevatedButton(
+            TextButton(
               onPressed: _isButtonDisabled ? null : _resendCode,
-              style: _isButtonDisabled
-                  ? ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.grey))
-                  : AppTheme.elevatedButtonStyle,
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.transparent),
+              ),
               child: Text(
-                'Resend Code',
+                'Resend code',
                 style: TextStyle(
-                  fontSize: 18.0,
-                  color: Colors.white,
+                  fontSize: 16.0,
+                  color: _isButtonDisabled ? Colors.grey : Colors.blue,
                 ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                // Add your change email address functionality here
+              },
+              child: Text(
+                'Change the Phone No:',
+                style: TextStyle(fontSize: 16.0, color: Colors.green),
               ),
             ),
           ],
@@ -169,7 +213,47 @@ class _OtpScreenState extends State<OtpScreen> {
       ),
     );
   }
+
+  Widget _buildOtpBox(int index) {
+    return Container(
+      width: 40,
+      height: 60,
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Center(
+        child: TextField(
+          controller: _otpControllers[index],
+          focusNode: _focusNodes[index],
+          maxLength: 1,
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          keyboardType: TextInputType.number,
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            counterText: '',
+          ),
+          onChanged: (value) {
+            if (value.length == 1) {
+              if (index < 5) {
+                FocusScope.of(context).nextFocus();
+              } else {
+                FocusScope.of(context).unfocus();
+              }
+            }
+            if (value.isEmpty && index > 0) {
+              FocusScope.of(context).previousFocus();
+            }
+          },
+        ),
+      ),
+    );
+  }
 }
+
+
+
 
 
 
