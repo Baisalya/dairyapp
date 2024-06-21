@@ -1,23 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
-
-import '../../Controller/AuthController.dart';
-import '../../Utility/theme.dart';
-import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
-import 'OtpScreen.dart';
-
-
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
 import '../../Controller/AuthController.dart';
 import '../../Utility/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'OtpScreen.dart';
-
 class LoginScreen extends StatefulWidget {
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -139,88 +126,90 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               Expanded(
-                child: Card(
-                  color: Colors.white,
-                  margin: EdgeInsets.zero,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(40),
-                      topRight: Radius.circular(40),
+                child: SingleChildScrollView(
+                  child: Card(
+                    color: Colors.white,
+                    margin: EdgeInsets.zero,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(40),
+                        topRight: Radius.circular(40),
+                      ),
                     ),
-                  ),
-                  elevation: 8,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        _buildTextField(context, 'Mobile no:', controller: _phoneNumberController),
-                        SizedBox(height: 20),
-                        ElevatedButton(
-                          onPressed: _verifyPhoneNumber,
-                          style: AppTheme.elevatedButtonStyle,
-                          child: Text(
-                            'Send Code',
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 20),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Don't have an account? ",
+                    elevation: 8,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          _buildTextField(context, 'Mobile no:', controller: _phoneNumberController),
+                          SizedBox(height: 20),
+                          ElevatedButton(
+                            onPressed: _verifyPhoneNumber,
+                            style: AppTheme.elevatedButtonStyle,
+                            child: Text(
+                              'Send Code',
                               style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 16.0,
+                                fontSize: 18.0,
+                                color: Colors.white,
                               ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).pushNamed('/signup');
-                              },
-                              child: Text(
-                                'Sign Up',
-                                style: TextStyle(
-                                  color: AppTheme.primaryColor,
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 20),
-                        OutlinedButton(
-                          onPressed: _handleGoogleSignIn,
-                          style: OutlinedButton.styleFrom(
-                            side: BorderSide(color: Colors.red),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20.0),
                             ),
                           ),
-                          child: Row(
+                          SizedBox(height: 20),
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Image.asset(
-                                'assets/google_logo.png', // Replace with your Google logo asset path
-                                height: 24.0,
-                              ),
-                              SizedBox(width: 10),
                               Text(
-                                'Sign up with Google',
+                                "Don't have an account? ",
                                 style: TextStyle(
+                                  color: Colors.black,
                                   fontSize: 16.0,
-                                  color: Colors.red,
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).pushNamed('/signup');
+                                },
+                                child: Text(
+                                  'Sign Up',
+                                  style: TextStyle(
+                                    color: AppTheme.primaryColor,
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
                             ],
                           ),
-                        ),
-                      ],
+                          SizedBox(height: 20),
+                          OutlinedButton(
+                            onPressed: _handleGoogleSignIn,
+                            style: OutlinedButton.styleFrom(
+                              side: BorderSide(color: Colors.red),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.0),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  'assets/google_logo.png', // Replace with your Google logo asset path
+                                  height: 24.0,
+                                ),
+                                SizedBox(width: 10),
+                                Text(
+                                  'Sign up with Google',
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

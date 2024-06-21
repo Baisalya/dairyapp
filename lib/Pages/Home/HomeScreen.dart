@@ -2,6 +2,8 @@ import 'package:dairyapp/Pages/Home/Tabs/SettingTab.dart';
 import 'package:flutter/material.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 
+import '../../Utility/Customeappbar.dart';
+
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -26,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CustomAppBar(title:"Milky",),
       body: _pages[_selectedIndex],
       bottomNavigationBar: ConvexAppBar(
         style: TabStyle.react,

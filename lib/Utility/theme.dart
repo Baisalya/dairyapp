@@ -14,7 +14,8 @@ class AppTheme {
 
   // Heading text color
   static const Color headingColor = Color(0xFF1A237E); // Example color
-
+// Title text color
+  static const Color titleColor = Colors.white; // Example color
   // Bold text color
   static const Color boldTextColor = Color(0xFF212121); // Example color
 
@@ -48,7 +49,12 @@ class AppTheme {
     fontSize: 24,
     fontWeight: FontWeight.bold,
   );
-
+  // Text styles
+  static const TextStyle TitleTextStyle = TextStyle(
+    color: titleColor,
+    fontSize: 24,
+    fontWeight: FontWeight.bold,
+  );
   static const TextStyle boldTextStyle = TextStyle(
     color: boldTextColor,
     fontSize: 18,

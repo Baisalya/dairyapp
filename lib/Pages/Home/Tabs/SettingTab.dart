@@ -8,13 +8,13 @@ class SettingsTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _buildAppBar(context),
+      //appBar: _buildAppBar(context),
       body: _buildSettingsList(),
       bottomNavigationBar: _buildAppVersion(),
     );
   }
 
-  PreferredSizeWidget _buildAppBar(BuildContext context) {
+ /* PreferredSizeWidget _buildAppBar(BuildContext context) {
     return AppBar(
       title: Text('App Settings'),
       leading: IconButton(
@@ -32,7 +32,7 @@ class SettingsTab extends StatelessWidget {
         ),
       ],
     );
-  }
+  }*/
 
   Widget _buildSettingsList() {
     return ListView(
