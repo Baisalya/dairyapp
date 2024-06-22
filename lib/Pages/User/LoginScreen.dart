@@ -1,9 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import '../../Controller/AuthController.dart';
 import '../../Utility/theme.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'OtpScreen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -15,9 +15,16 @@ class _LoginScreenState extends State<LoginScreen> {
   final AuthController _authController = AuthController();
   final TextEditingController _phoneNumberController = TextEditingController();
   String _completePhoneNumber = '';
+  bool _isLoading = false;
 
   void _handleGoogleSignIn() async {
+    setState(() {
+      _isLoading = true;
+    });
     User? user = await _authController.signInWithGoogle();
+    setState(() {
+      _isLoading = false;
+    });
     if (user != null) {
       Get.offNamed('/home');
     } else {
@@ -29,9 +36,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _verifyPhoneNumber() async {
     if (_completePhoneNumber.isNotEmpty) {
+      setState(() {
+        _isLoading = true;
+      });
       await _authController.verifyPhoneNumber(
         _completePhoneNumber,
             (verificationId) {
+          setState(() {
+            _isLoading = false;
+          });
           Get.to(() => OtpScreen(phoneNumber: _completePhoneNumber, verificationId: verificationId));
         },
             (credential) async {
@@ -39,6 +52,9 @@ class _LoginScreenState extends State<LoginScreen> {
             credential.verificationId!,
             credential.smsCode!,
           );
+          setState(() {
+            _isLoading = false;
+          });
           if (user != null) {
             Get.offNamed('/home');
           } else {
@@ -48,11 +64,17 @@ class _LoginScreenState extends State<LoginScreen> {
           }
         },
             (error) {
+          setState(() {
+            _isLoading = false;
+          });
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Phone verification failed: ${error.message}')),
           );
         },
             (verificationId) {
+          setState(() {
+            _isLoading = false;
+          });
           Get.to(() => OtpScreen(phoneNumber: _completePhoneNumber, verificationId: verificationId));
         },
       );
@@ -66,10 +88,9 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent, // Make scaffold background transparent
+      backgroundColor: Colors.transparent,
       body: Stack(
         children: [
-          // Gradient background
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -193,7 +214,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                   SizedBox(height: 30),
                                   ElevatedButton(
-                                    onPressed: _verifyPhoneNumber,
+                                    onPressed: _isLoading ? null : _verifyPhoneNumber,
                                     style: ElevatedButton.styleFrom(
                                       padding: EdgeInsets.symmetric(vertical: 16.0),
                                       shape: RoundedRectangleBorder(
@@ -201,7 +222,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                       ),
                                       primary: AppTheme.primaryColor,
                                     ),
-                                    child: Text(
+                                    //if loading animation
+                                    child: _isLoading
+                                        ? CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                    )
+                                        : Text(
                                       'Send Code',
                                       style: TextStyle(
                                         fontSize: 18.0,
@@ -237,7 +263,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                   SizedBox(height: 30),
                                   OutlinedButton(
-                                    onPressed: _handleGoogleSignIn,
+                                    onPressed: _isLoading ? null : _handleGoogleSignIn,
                                     style: OutlinedButton.styleFrom(
                                       padding: EdgeInsets.symmetric(vertical: 15.0),
                                       side: BorderSide(color: Colors.red),
