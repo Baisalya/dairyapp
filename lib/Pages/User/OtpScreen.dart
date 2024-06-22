@@ -159,7 +159,7 @@ class _OtpScreenState extends State<OtpScreen> with CodeAutoFill {
             SizedBox(height: 20),
             Center(
               child: Image.asset(
-                'assets/images/otp_lock.jpeg', // Add your illustration asset here
+                'assets/otp_lock.jpeg', // Add your illustration asset here
                 height: 150,
               ),
             ),
@@ -171,7 +171,7 @@ class _OtpScreenState extends State<OtpScreen> with CodeAutoFill {
             ),
             SizedBox(height: 10),
             Text(
-              'We will send you an One Time Passcode via this ${widget.phoneNumber} email address',
+              'We will send you an One Time Passcode via this ${widget.phoneNumber} ',
               style: TextStyle(fontSize: 16.0),
               textAlign: TextAlign.center,
             ),

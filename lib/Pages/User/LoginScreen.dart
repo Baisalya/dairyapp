@@ -5,6 +5,7 @@ import '../../Controller/AuthController.dart';
 import '../../Utility/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'OtpScreen.dart';
+
 class LoginScreen extends StatefulWidget {
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -65,197 +66,217 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xFF73AEF5), Color(0xFF61A4F1), Color(0xFF478DE0), Color(0xFF398AE5)],
-            stops: [0.1, 0.4, 0.7, 0.9],
-          ),
-        ),
-        child: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(
-                height: 250,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Positioned.fill(
-                      child: Image.asset(
-                        'assets/user/drinkmilk.png',
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [Colors.transparent, Colors.black.withOpacity(0.7)],
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Welcome Back!',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 24.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          Text(
-                            'Log In to continue',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16.0,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+      backgroundColor: Colors.transparent, // Make scaffold background transparent
+      body: Stack(
+        children: [
+          // Gradient background
+          Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [Color(0xFF73AEF5), Color(0xFF61A4F1), Color(0xFF478DE0), Color(0xFF398AE5)],
+                stops: [0.1, 0.4, 0.7, 0.9],
               ),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Card(
-                    color: Colors.white,
-                    margin: EdgeInsets.zero,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(40),
-                        topRight: Radius.circular(40),
-                      ),
-                    ),
-                    elevation: 8,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
+            ),
+          ),
+          SafeArea(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return SingleChildScrollView(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                    child: IntrinsicHeight(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          _buildTextField(context, 'Mobile no:', controller: _phoneNumberController),
-                          SizedBox(height: 20),
-                          ElevatedButton(
-                            onPressed: _verifyPhoneNumber,
-                            style: AppTheme.elevatedButtonStyle,
-                            child: Text(
-                              'Send Code',
-                              style: TextStyle(
-                                fontSize: 18.0,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 20),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Don't have an account? ",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16.0,
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context).pushNamed('/signup');
-                                },
-                                child: Text(
-                                  'Sign Up',
-                                  style: TextStyle(
-                                    color: AppTheme.primaryColor,
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.bold,
+                          Container(
+                            height: 250,
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                Positioned.fill(
+                                  child: Image.asset(
+                                    'assets/user/drinkmilk.png',
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 20),
-                          OutlinedButton(
-                            onPressed: _handleGoogleSignIn,
-                            style: OutlinedButton.styleFrom(
-                              side: BorderSide(color: Colors.red),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20.0),
-                              ),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  'assets/google_logo.png', // Replace with your Google logo asset path
-                                  height: 24.0,
+                                Container(
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                      colors: [Colors.transparent, Colors.black.withOpacity(0.7)],
+                                    ),
+                                  ),
                                 ),
-                                SizedBox(width: 10),
-                                Text(
-                                  'Sign up with Google',
-                                  style: TextStyle(
-                                    fontSize: 16.0,
-                                    color: Colors.red,
+                                Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        'Welcome Back!',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 32.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      SizedBox(height: 10),
+                                      Text(
+                                        'Log In to continue',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 18.0,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 36.0),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(40),
+                                  topRight: Radius.circular(40),
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.1),
+                                    spreadRadius: 5,
+                                    blurRadius: 10,
+                                    offset: Offset(0, 3),
+                                  ),
+                                ],
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Text(
+                                    'Mobile no:',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  SizedBox(height: 10),
+                                  IntlPhoneField(
+                                    controller: _phoneNumberController,
+                                    initialCountryCode: 'IN',
+                                    decoration: InputDecoration(
+                                      filled: true,
+                                      fillColor: Colors.grey[100],
+                                      contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 15.0),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.grey[300]!),
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: AppTheme.primaryColor, width: 2.0),
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      ),
+                                    ),
+                                    onChanged: (phone) {
+                                      _completePhoneNumber = phone.completeNumber;
+                                      print(_completePhoneNumber);
+                                    },
+                                    onCountryChanged: (phone) {
+                                      print('Country code changed to: ${phone.code}');
+                                    },
+                                  ),
+                                  SizedBox(height: 30),
+                                  ElevatedButton(
+                                    onPressed: _verifyPhoneNumber,
+                                    style: ElevatedButton.styleFrom(
+                                      padding: EdgeInsets.symmetric(vertical: 16.0),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      ),
+                                      primary: AppTheme.primaryColor,
+                                    ),
+                                    child: Text(
+                                      'Send Code',
+                                      style: TextStyle(
+                                        fontSize: 18.0,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 20),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "Don't have an account? ",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16.0,
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.of(context).pushNamed('/signup');
+                                        },
+                                        child: Text(
+                                          'Sign Up',
+                                          style: TextStyle(
+                                            color: AppTheme.primaryColor,
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 30),
+                                  OutlinedButton(
+                                    onPressed: _handleGoogleSignIn,
+                                    style: OutlinedButton.styleFrom(
+                                      padding: EdgeInsets.symmetric(vertical: 15.0),
+                                      side: BorderSide(color: Colors.red),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      ),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Image.asset(
+                                          'assets/google_logo.png',
+                                          height: 24.0,
+                                        ),
+                                        SizedBox(width: 10),
+                                        Text(
+                                          'Sign up with Google',
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.red,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ],
                       ),
                     ),
                   ),
-                ),
-              ),
-            ],
+                );
+              },
+            ),
           ),
-        ),
+        ],
       ),
-    );
-  }
-
-  Widget _buildTextField(BuildContext context, String labelText, {bool isPassword = false, TextEditingController? controller}) {
-    return IntlPhoneField(
-      controller: controller,
-      obscureText: isPassword,
-      initialCountryCode: 'IN',
-      decoration: InputDecoration(
-        labelText: labelText,
-        labelStyle: TextStyle(
-          color: Colors.black,
-          fontSize: 16.0,
-          fontWeight: FontWeight.w500,
-        ),
-        filled: true,
-        fillColor: Colors.white,
-        contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 15.0),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white),
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: AppTheme.primaryColor, width: 2.0),
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-      ),
-      onChanged: (phone) {
-        _completePhoneNumber = phone.completeNumber;
-        print(_completePhoneNumber);
-      },
-      onCountryChanged: (phone) {
-        print('Country code changed to: ${phone.code}');
-      },
     );
   }
 }
-
-
-
-
