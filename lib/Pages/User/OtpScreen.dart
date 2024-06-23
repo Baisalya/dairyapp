@@ -248,7 +248,7 @@ class _OtpScreenState extends State<OtpScreen> with CodeAutoFill {
           focusNode: _focusNodes[index],
           maxLength: 1,
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold,color: AppTheme.textColor),
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
             border: InputBorder.none,

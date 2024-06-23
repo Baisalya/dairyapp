@@ -17,7 +17,7 @@ class TermsAndConditionsScreen extends StatelessWidget {
           children: [
             SectionTitle('1. Acceptance of Terms'),
             SectionText(
-              'By using the CitizenApp mobile application ("the App"), you agree to comply with and be bound by the following terms and conditions of use. If you do not agree to these terms, please do not use the App.',
+              'By using the PUREDAIRY mobile application ("the App"), you agree to comply with and be bound by the following terms and conditions of use. If you do not agree to these terms, please do not use the App.',
             ),
 
             SectionTitle('2. Emergency Services Disclaimer'),

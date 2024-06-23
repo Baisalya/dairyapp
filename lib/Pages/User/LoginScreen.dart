@@ -191,6 +191,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   IntlPhoneField(
                                     controller: _phoneNumberController,
                                     initialCountryCode: 'IN',
+                                    style:TextStyle(color: AppTheme.textColor),
                                     decoration: InputDecoration(
                                       filled: true,
                                       fillColor: Colors.grey[100],
@@ -239,7 +240,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Text(
+                                      const Text(
                                         "Don't have an account? ",
                                         style: TextStyle(
                                           color: Colors.black,
@@ -279,7 +280,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           height: 24.0,
                                         ),
                                         SizedBox(width: 10),
-                                        Text(
+                                        const Text(
                                           'Sign up with Google',
                                           style: TextStyle(
                                             fontSize: 16.0,

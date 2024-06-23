@@ -16,7 +16,7 @@ const TextStyle contentStyle = TextStyle(
 );
 
 class PrivacyPolicyScreen extends StatelessWidget {
-  final String appName = "Citizen App";
+  final String appName = "Pure Dairy";
   final String lastUpdated = DateFormat.yMMMMd().format(DateTime.now());
   final String contactEmail = "baishalya1999@gmail.com";
 

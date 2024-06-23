@@ -4,15 +4,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:flutter/material.dart';
+import '../Controller/AuthController.dart';import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'dart:async';
 
-import '../Controller/AuthController.dart';
 class SplashScreen extends StatefulWidget {
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
+
 class _SplashScreenState extends State<SplashScreen> {
   final AuthController _authController = AuthController();
 
@@ -42,36 +41,40 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.blue,
-      body: Stack(
-        children: [
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Image.asset(
-              'assets/splash/milkbottle.png',
-              width: MediaQuery.of(context).size.width,
-              fit: BoxFit.fitWidth,
-            ),
-          ),
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'DairyApp',
-                  style: TextStyle(
-                    fontSize: 48,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return Stack(
+            children: [
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Image.asset(
+                  'assets/splash/milkbottle.png',
+                  width: constraints.maxWidth,
+                  fit: BoxFit.fitWidth,
                 ),
-              ],
-            ),
-          ),
-        ],
+              ),
+              Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/splash/Pure_Dairy.png',
+                      width: constraints.maxWidth * 0.8, // Example of responsive design
+                      fit: BoxFit.fitWidth,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
 }
+
 
 
 
