@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 
 import '../../Utility/Customeappbar.dart';
+import 'Tabs/HomePageTab/HomePagetab.dart';
 
 
 class HomeScreen extends StatefulWidget {
@@ -15,7 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   static List<Widget> _pages = <Widget>[
     Center(child: Text('Page 1')),
-    Center(child: Text('Page 2')),
+    HomePageTab(),
     SettingsTab(),
   ];
 
